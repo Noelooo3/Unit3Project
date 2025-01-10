@@ -7,36 +7,40 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private CharacterController characterController;
     [SerializeField] private Camera camera;
-    [SerializeField] private Transform characterGroundCheckPoint;
+    
+    [SerializeField] private Rigidbody bulletPrefab;
+    [SerializeField] private Rigidbody RocketPrefab;
+    [SerializeField] private Transform shootPoint;
     
     [SerializeField] private float playerMoveSpeed;
     [SerializeField] private float sprintMultiplier;
     [SerializeField] private float playerRotationSpeed;
-
     [SerializeField] private float playerJumpVelocity;
+    
+    [SerializeField] private float bulletInitialVelocity;
+    [SerializeField] private float rocketInitialVelocity;
     
     private float _cameraXRotation;
     
     private float _currentVerticalVelocity = -2f;
     private float _gravity = -9.81f;
-    private float _minimumDistanceToTheGround = 0.1f;
     
     private bool _isGrounded;
-    private LayerMask _groundLayer;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _cameraXRotation = 0f;
-        _groundLayer = LayerMask.GetMask("Ground");
     }
 
     private void Update()
     {
+        _isGrounded = characterController.isGrounded;
         Rotate();
         Move();
         MoveUpAndDown();
+        Fire();
     }
 
     private void Move()
@@ -75,8 +79,6 @@ public class PlayerController : MonoBehaviour
 
     private void MoveUpAndDown()
     {
-        _isGrounded = Physics.CheckSphere(characterGroundCheckPoint.position, _minimumDistanceToTheGround, _groundLayer);
-        
         if (_isGrounded)
         {
             if (Input.GetButton("Jump"))
@@ -96,5 +98,30 @@ public class PlayerController : MonoBehaviour
         }
         
         characterController.Move(new Vector3(0, _currentVerticalVelocity * Time.deltaTime, 0));
+    }
+
+    private void Fire()
+    {
+        if (Input.GetButtonDown("Fire1"))
+        {
+            FireBullet();
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            FireRocket();
+        }
+    }
+    
+    private void FireBullet()
+    {
+        Rigidbody bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
+        bullet.velocity = camera.transform.forward * bulletInitialVelocity;
+    }
+
+    private void FireRocket()
+    {
+        Rigidbody rocket = Instantiate(RocketPrefab, shootPoint.position, Quaternion.identity);
+        rocket.velocity = camera.transform.forward * rocketInitialVelocity;
     }
 }
