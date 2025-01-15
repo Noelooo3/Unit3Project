@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody bulletPrefab;
     [SerializeField] private Rigidbody RocketPrefab;
     [SerializeField] private Transform shootPoint;
+    [SerializeField] private Transform pickUpPoint;
     
     [SerializeField] private float playerMoveSpeed;
     [SerializeField] private float sprintMultiplier;
@@ -19,6 +20,10 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] private float bulletInitialVelocity;
     [SerializeField] private float rocketInitialVelocity;
+
+    [SerializeField] private float maximumInteractableDistance;
+    [SerializeField] private LayerMask selectableObjectLayer;
+    [SerializeField] private LayerMask pickableObjectLayer;
     
     private float _cameraXRotation;
     
@@ -26,6 +31,9 @@ public class PlayerController : MonoBehaviour
     private float _gravity = -9.81f;
     
     private bool _isGrounded;
+
+    private ISelectable _currentSelectableObject;
+    private IPickable _currentPickableObject;
 
     private void Start()
     {
@@ -41,6 +49,8 @@ public class PlayerController : MonoBehaviour
         Move();
         MoveUpAndDown();
         Fire();
+        InteractWithSelectableObject();
+        PickAndDrop();
     }
 
     private void Move()
@@ -123,5 +133,71 @@ public class PlayerController : MonoBehaviour
     {
         Rigidbody rocket = Instantiate(RocketPrefab, shootPoint.position, Quaternion.identity);
         rocket.velocity = camera.transform.forward * rocketInitialVelocity;
+    }
+
+    private void InteractWithSelectableObject()
+    {
+        Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        //Second way to make the Ray:
+        //Ray ray = new Ray(camera.transform.position, camera.transform.forward);
+
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, maximumInteractableDistance, selectableObjectLayer))
+        {
+            // Ray hits something
+            _currentSelectableObject = hit.transform.GetComponent<ISelectable>();
+            if (_currentSelectableObject != null)
+            {
+                _currentSelectableObject.OnHoverEnter();
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    _currentSelectableObject.Interact();
+                }
+            }
+        }
+        else
+        {
+            // Ray doesn't hit anything
+            if (_currentSelectableObject != null)
+            {
+                _currentSelectableObject.OnHoverExit();
+                _currentSelectableObject = null;
+            }
+        }
+    }
+
+    private void PickAndDrop()
+    {
+        // if (_currentPickableObject != null && Input.GetKeyDown(KeyCode.F))
+        // {
+        //     Debug.Log("Drop object");
+        //     _currentPickableObject.Drop();
+        //     _currentPickableObject = null;
+        //     return;
+        // }
+        
+        Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        if (Physics.Raycast(ray, out RaycastHit hit, maximumInteractableDistance, pickableObjectLayer))
+        {
+            IPickable pickableObject = hit.transform.GetComponent<IPickable>(); 
+            if (pickableObject != null)
+            {
+                Debug.Log("Get the object");
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    Debug.Log("Pick up the object");
+                    pickableObject.PickUp(pickUpPoint);
+                    _currentPickableObject = pickableObject;
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 startingPoint = camera.transform.position;
+        Vector3 endPoint = camera.transform.position + camera.transform.forward * maximumInteractableDistance;
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(startingPoint, endPoint);
     }
 }

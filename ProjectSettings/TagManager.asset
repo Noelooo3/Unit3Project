@@ -15,8 +15,8 @@ TagManager:
   - Rocket
   - BulletDestroyable
   - RocketDestroyable
-  - 
-  - 
+  - Selectable
+  - Pickable
   - 
   - 
   - 
