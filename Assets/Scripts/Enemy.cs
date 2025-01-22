@@ -7,8 +7,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private Transform player;
-
+    
     // private void Start()
     // {
     //     agent.destination = player.position;
@@ -16,6 +15,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        agent.destination = player.position;
+        agent.destination = Player.GetInstance().transform.position;
     }
 }

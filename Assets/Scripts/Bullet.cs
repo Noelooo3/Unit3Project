@@ -5,9 +5,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private Rigidbody bulletRigidbody;
+
+    public Action<Rigidbody> OnHitListener;
+    
     private void OnCollisionEnter(Collision other)
     {
-        Destroy(this.gameObject);
+        OnHitListener?.Invoke(bulletRigidbody);
+        
         if (other.gameObject.layer != 3)
         {
             Destroy(other.gameObject);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,13 @@ public class PlayerMovementController : MonoBehaviour
     private float _currentVerticalVelocity = -2f;
     
     private const float GRAVITY = -9.81f;
+
+    private void Start()
+    {
+        // Maybe this should go somewhere else!
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     private void Update()
     {

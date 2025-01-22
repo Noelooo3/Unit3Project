@@ -783,7 +783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &330397480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -797,7 +797,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 330397481}
-  player: {fileID: 1173959824}
 --- !u!195 &330397481
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3509,9 +3508,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1173959824}
-  - component: {fileID: 1173959820}
   - component: {fileID: 1173959819}
   - component: {fileID: 1173959825}
+  - component: {fileID: 1173959826}
+  - component: {fileID: 1173959827}
+  - component: {fileID: 1173959828}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3545,37 +3546,6 @@ CharacterController:
   m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1173959820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1173959818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 458fb94bd69d80f48832ac76c71e65c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterController: {fileID: 1173959819}
-  camera: {fileID: 963194227}
-  bulletPrefab: {fileID: 1011504775602172085, guid: 7cbb5358755a6f045afe9eb4bd828365, type: 3}
-  RocketPrefab: {fileID: 1011504775602172085, guid: 8b914d1ff07d3c2449354a21f88ff8ee, type: 3}
-  shootPoint: {fileID: 1886005979}
-  pickUpPoint: {fileID: 626847934}
-  playerMoveSpeed: 10
-  sprintMultiplier: 10
-  playerRotationSpeed: 200
-  playerJumpVelocity: 5
-  bulletInitialVelocity: 20
-  rocketInitialVelocity: 50
-  maximumInteractableDistance: 2
-  selectableObjectLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  pickableObjectLayer:
-    serializedVersion: 2
-    m_Bits: 2048
 --- !u!4 &1173959824
 Transform:
   m_ObjectHideFlags: 0
@@ -3614,6 +3584,58 @@ MonoBehaviour:
   playerRotationSpeed: 200
   playerJumpVelocity: 5
   sprintMultiplier: 10
+--- !u!114 &1173959826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173959818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2182eae3a4d8b489adeefb540aa908, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpsCamera: {fileID: 963194227}
+  bulletPrefab: {fileID: 1011504775602172085, guid: 7cbb5358755a6f045afe9eb4bd828365, type: 3}
+  rocketPrefab: {fileID: 1011504775602172085, guid: 8b914d1ff07d3c2449354a21f88ff8ee, type: 3}
+  shootPoint: {fileID: 1886005979}
+  bulletInitialVelocity: 20
+  rocketInitialVelocity: 50
+  bulletPool: []
+--- !u!114 &1173959827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173959818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04745b89bdae63b4385f43d5b949c8ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fpsCamera: {fileID: 963194227}
+  pickUpPoint: {fileID: 626847934}
+  maximumInteractableDistance: 2
+  selectableObjectLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  pickableObjectLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+--- !u!114 &1173959828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173959818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ddf8a9214fc88488ded8db4c505dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1192662826
 GameObject:
   m_ObjectHideFlags: 0
