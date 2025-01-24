@@ -79,7 +79,6 @@ public class PlayerWeaponController : MonoBehaviour
         Debug.Log("Create a new rocket");
         Rigidbody rocket = Instantiate(rocketPrefab, shootPoint.position, Quaternion.identity);
         rocket.GetComponent<Bullet>().OnHitListener = OnRocketHit;
-        rocket.velocity = fpsCamera.transform.forward * rocketInitialVelocity;
         return rocket;
     }
 
@@ -103,7 +102,7 @@ public class PlayerWeaponController : MonoBehaviour
     private void DestroyRocket(Rigidbody rocket)
     {
         Debug.Log("Destroying rocket");
-        //TODO: destroy rocket here.
+        Destroy(rocket.gameObject);
     }
 
     private void OnRocketHit(Rigidbody rocket)
