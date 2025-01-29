@@ -9,104 +9,67 @@ public class PlayerWeaponController : MonoBehaviour
     [SerializeField] private Rigidbody bulletPrefab;
     [SerializeField] private Rigidbody rocketPrefab;
     [SerializeField] private Transform shootPoint;
-    [SerializeField] private float bulletInitialVelocity;
-    [SerializeField] private float rocketInitialVelocity;
+    
+    // Test code:
+    [SerializeField] private MeshRenderer playerRenderer;
+    [SerializeField] private Material blue;
+    [SerializeField] private Material red;
 
     // Use a list for demo, just because list is visible in the inspector. But it's not ideal.
     public List<Rigidbody> bulletPool;
     // Use the one from Unity
     public ObjectPool<Rigidbody> rocketPool;
 
+    private IShootStrategy _currentShootStrategy;
+    private List<IShootStrategy> _currentShootStrategyList;
+
     private void Awake()
     {
         bulletPool = new List<Rigidbody>();
-        rocketPool = new ObjectPool<Rigidbody>(CreateRocket, GetRocket, ReturnRocket, DestroyRocket, defaultCapacity: 0, maxSize: 5);
+        _currentShootStrategyList = new List<IShootStrategy>();
+        
+        IShootStrategy shootRocketStrategy = new ShootRocketStrategy(shootPoint, fpsCamera.transform, rocketPrefab);
+        _currentShootStrategyList.Add(shootRocketStrategy);
+        IShootStrategy shootBulletStrategy = new ShootBulletStrategy(shootPoint, fpsCamera.transform, bulletPrefab);
+        _currentShootStrategyList.Add(shootBulletStrategy);
     }
 
     private void Update()
     {
+        SwitchWeapon();
         Fire();
     }
 
+    private void SwitchWeapon()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (_currentShootStrategyList.Count >= 1)
+            {
+                _currentShootStrategy = _currentShootStrategyList[0];
+                playerRenderer.material = red;
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (_currentShootStrategyList.Count >= 2)
+            {
+                _currentShootStrategy = _currentShootStrategyList[1];
+                playerRenderer.material = blue;
+            }
+        }
+    }
+    
     private void Fire()
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            FireBullet();
+            if (_currentShootStrategy == null)
+            {
+                Debug.Log("No shoot strategy");
+                return;
+            }
+            _currentShootStrategy.Shoot();
         }
-
-        if (Input.GetButtonDown("Fire2"))
-        {
-            FireRocket();
-        }
-    }
-    
-    private void FireBullet()
-    {
-        if (bulletPool.Count > 0)
-        {
-            // Get the first bullet in the pool
-            Rigidbody bullet = bulletPool[0];
-            bulletPool.RemoveAt(0);
-            bullet.transform.position = shootPoint.position;
-            bullet.transform.rotation = Quaternion.identity;
-            bullet.gameObject.SetActive(true);
-            bullet.isKinematic = false;
-            bullet.velocity = fpsCamera.transform.forward * bulletInitialVelocity;
-        }
-        else
-        {
-            Rigidbody bullet = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-            bullet.GetComponent<Bullet>().OnHitListener = OnBulletHit;
-            bullet.velocity = fpsCamera.transform.forward * bulletInitialVelocity;
-        }
-    }
-
-    private void OnBulletHit(Rigidbody bullet)
-    {
-        bullet.isKinematic = true;
-        bullet.gameObject.SetActive(false);
-        bulletPool.Add(bullet);
-    }
-
-    private void FireRocket()
-    {
-        rocketPool.Get();
-    }
-
-    private Rigidbody CreateRocket()
-    {
-        Debug.Log("Create a new rocket");
-        Rigidbody rocket = Instantiate(rocketPrefab, shootPoint.position, Quaternion.identity);
-        rocket.GetComponent<Bullet>().OnHitListener = OnRocketHit;
-        return rocket;
-    }
-
-    private void GetRocket(Rigidbody rocket)
-    {
-        Debug.Log("Get rocket from the pool");
-        rocket.transform.position = shootPoint.position;
-        rocket.transform.rotation = Quaternion.identity;
-        rocket.gameObject.SetActive(true);
-        rocket.isKinematic = false;
-        rocket.velocity = fpsCamera.transform.forward * rocketInitialVelocity;
-    }
-
-    private void ReturnRocket(Rigidbody rocket)
-    {
-        Debug.Log("Returning rocket");
-        rocket.isKinematic = true;
-        rocket.gameObject.SetActive(false);
-    }
-
-    private void DestroyRocket(Rigidbody rocket)
-    {
-        Debug.Log("Destroying rocket");
-        Destroy(rocket.gameObject);
-    }
-
-    private void OnRocketHit(Rigidbody rocket)
-    {
-        rocketPool.Release(rocket);
     }
 }
