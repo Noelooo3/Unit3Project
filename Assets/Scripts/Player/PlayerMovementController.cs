@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class PlayerMovementController : MonoBehaviour
 
     private float _cameraXRotation;
     private float _currentVerticalVelocity = -2f;
+
+    private Vector2 _movementInput;
+    private bool _isJumpPressed;
+    private bool _isSprintPressed;
     
     private const float GRAVITY = -9.81f;
 
@@ -28,15 +33,27 @@ public class PlayerMovementController : MonoBehaviour
     private void Update()
     {
         Move();
-        Rotate();
+    }
+
+    private void OnMove(InputValue value)
+    {
+        _movementInput = value.Get<Vector2>();
+    }
+
+    private void OnJump(InputValue value)
+    {
+        _isJumpPressed = value.isPressed;
+    }
+
+    private void OnSprint(InputValue value)
+    {
+        _isSprintPressed = value.isPressed;
     }
     
     private void Move()
     {
-        float frontAndBack = Input.GetAxis("Vertical");
-        float leftAndRight = Input.GetAxis("Horizontal");
-        bool isJumping = Input.GetButton("Jump");
-        bool isSprinting = Input.GetButton("Sprint");
+        float frontAndBack = _movementInput.y;
+        float leftAndRight = _movementInput.x;
         bool isGrounded = characterController.isGrounded;
 
         Vector3 forwardMovement = frontAndBack * transform.forward * playerMoveSpeed * Time.deltaTime;
@@ -44,14 +61,14 @@ public class PlayerMovementController : MonoBehaviour
         // at this point no up and down
         Vector3 fullMovement = forwardMovement + rightMovement;
         
-        if (isSprinting)
+        if (_isSprintPressed)
         {
             fullMovement *= sprintMultiplier;
         }
         
         if (isGrounded)
         {
-            if (isJumping)
+            if (_isJumpPressed)
             {
                 _currentVerticalVelocity = playerJumpVelocity;
             }
@@ -73,14 +90,15 @@ public class PlayerMovementController : MonoBehaviour
         characterController.Move(fullMovement);
     }
 
-    private void Rotate()
+    private void OnLook(InputValue value)
     {
-        // Left and right is on the player
-        float mouseHorizontal = Input.GetAxis("Mouse X");
+        Vector2 mouseValue = value.Get<Vector2>();
+        
+        float mouseHorizontal = mouseValue.x;
         transform.Rotate(Vector3.up * mouseHorizontal * playerRotationSpeed * Time.deltaTime);
         
         // up and down is on the camera
-        float mouseVertical = Input.GetAxis("Mouse Y");
+        float mouseVertical = mouseValue.y;
         _cameraXRotation += (-mouseVertical * playerRotationSpeed * Time.deltaTime);
         
         // make sure the limit is -80 degree to 80 degree

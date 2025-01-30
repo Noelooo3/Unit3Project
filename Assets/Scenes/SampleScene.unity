@@ -3765,6 +3765,7 @@ GameObject:
   - component: {fileID: 1173959826}
   - component: {fileID: 1173959827}
   - component: {fileID: 1173959828}
+  - component: {fileID: 1173959829}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3833,7 +3834,7 @@ MonoBehaviour:
   characterController: {fileID: 1173959819}
   fpsCamera: {fileID: 963194227}
   playerMoveSpeed: 10
-  playerRotationSpeed: 200
+  playerRotationSpeed: 50
   playerJumpVelocity: 5
   sprintMultiplier: 10
 --- !u!114 &1173959826
@@ -3889,6 +3890,100 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ddf8a9214fc88488ded8db4c505dcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1173959829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173959818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 9507d8bf23824fe4f9067f752a9a98ff, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b5efce0d-f373-4fa5-a62d-e3357ece63cf
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e15e0c8e-840c-41e8-a02e-d57018c21602
+    m_ActionName: Player/Look[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d7fdaa39-d8f7-43b4-9c89-d99b9e526345
+    m_ActionName: Player/Fire[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 570d15d5-6be0-447f-9ac1-48ec4014c678
+    m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fe531fcd-7e9c-47d7-b183-29b9fe896466
+    m_ActionName: Player/PrimaryWeapon[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: adc80a60-fde8-433d-9a3c-016f02537b17
+    m_ActionName: Player/SecondaryWeapon[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 83074e2a-cf1c-4877-919a-93d353a29bb7
+    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 32913f1c-aba0-4669-80d2-5a302af5597f
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 23eaae78-f8e2-49e6-a65f-cdd945add102
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4390c41e-2c76-436b-b147-79cb71cd14a5
+    m_ActionName: UI/Point[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0256ed18-8946-4089-a1bf-8dfa0d6f8e9e
+    m_ActionName: UI/Click[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fa258dd0-0cfe-4355-a01b-42e63c9323f5
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ab705722-3cc4-4bdd-ad33-b7ae96ff8b10
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9bc4253a-4b33-4e0e-b263-094b89c9de20
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c7b150f1-dbc4-40b6-b8e0-449952ba6f43
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c9af4eec-7291-44bb-be77-4172973d6267
+    m_ActionName: UI/TrackedDeviceOrientation
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1192662826
 GameObject:
   m_ObjectHideFlags: 0

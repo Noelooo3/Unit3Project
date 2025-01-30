@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Pool;
 
 public class PlayerWeaponController : MonoBehaviour
@@ -34,42 +35,31 @@ public class PlayerWeaponController : MonoBehaviour
         _currentShootStrategyList.Add(shootBulletStrategy);
     }
 
-    private void Update()
+    private void OnPrimaryWeapon()
     {
-        SwitchWeapon();
-        Fire();
+        if (_currentShootStrategyList.Count >= 1)
+        {
+            _currentShootStrategy = _currentShootStrategyList[0];
+            playerRenderer.material = red;
+        }
     }
 
-    private void SwitchWeapon()
+    private void OnSecondaryWeapon()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (_currentShootStrategyList.Count >= 2)
         {
-            if (_currentShootStrategyList.Count >= 1)
-            {
-                _currentShootStrategy = _currentShootStrategyList[0];
-                playerRenderer.material = red;
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (_currentShootStrategyList.Count >= 2)
-            {
-                _currentShootStrategy = _currentShootStrategyList[1];
-                playerRenderer.material = blue;
-            }
+            _currentShootStrategy = _currentShootStrategyList[1];
+            playerRenderer.material = blue;
         }
     }
-    
-    private void Fire()
+
+    public void OnFire()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (_currentShootStrategy == null)
         {
-            if (_currentShootStrategy == null)
-            {
-                Debug.Log("No shoot strategy");
-                return;
-            }
-            _currentShootStrategy.Shoot();
+            Debug.Log("No shoot strategy");
+            return;
         }
+        _currentShootStrategy.Shoot();
     }
 }

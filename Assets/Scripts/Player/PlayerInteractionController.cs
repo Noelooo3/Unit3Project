@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteractionController : MonoBehaviour
 {
@@ -13,9 +14,29 @@ public class PlayerInteractionController : MonoBehaviour
     private ISelectable _currentSelectableObject;
     private IPickable _currentPickableObject;
 
+    private bool _isSelectableInteracting;
+    private bool _isPickableInteracting;
+    
     private void Update()
     {
         InteractWithObject();
+    }
+
+    // This happens at the end of the game logic in a frame
+    private void LateUpdate()
+    {
+        _isPickableInteracting = false;
+        _isSelectableInteracting = false;
+    }
+    
+    private void OnSelectableInteract()
+    {
+        _isSelectableInteracting = true;
+    }
+
+    private void OnPickableInteract()
+    {
+        _isPickableInteracting = true;
     }
 
     private void InteractWithObject()
@@ -31,7 +52,7 @@ public class PlayerInteractionController : MonoBehaviour
             if (_currentSelectableObject != null)
             {
                 _currentSelectableObject.OnHoverEnter();
-                if (Input.GetKeyDown(KeyCode.E))
+                if (_isSelectableInteracting)
                 {
                     _currentSelectableObject.Interact();
                 }
@@ -50,7 +71,7 @@ public class PlayerInteractionController : MonoBehaviour
         // Check on pickable objects
         if (_currentPickableObject != null)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (_isPickableInteracting)
             {
                 Debug.Log("Drop object");
                 _currentPickableObject.Drop();
@@ -65,7 +86,7 @@ public class PlayerInteractionController : MonoBehaviour
             IPickable pickableObject = pickableObjectHit.transform.GetComponent<IPickable>(); 
             if (pickableObject != null)
             {
-                if (Input.GetKeyDown(KeyCode.F))
+                if (_isPickableInteracting)
                 {
                     Debug.Log("Pick up the object");
                     pickableObject.PickUp(pickUpPoint);
