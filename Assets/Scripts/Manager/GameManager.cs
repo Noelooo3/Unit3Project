@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager GetInstance() => _instance;
-    private static GameManager _instance;
-
     [SerializeField] private List<LevelManager> _levelManagers;
 
     private int _currentLevelIndex;
@@ -15,12 +12,7 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this);
-            return;
-        }
-        _instance = this;
+        ServiceLocator.GetInstance().RegisterGameManager(this);
     }
 
     private void Start()

@@ -16,6 +16,6 @@ public class LevelManager : MonoBehaviour
     public void ExitLevel()
     {
         OnLevelExitedListeners?.Invoke();
-        GameManager.GetInstance().ChangeGameState(GameManager.GameState.ExitLevel);
+        ServiceLocator.GetInstance().GetGameManager().ChangeGameState(GameManager.GameState.ExitLevel);
     }
 }
