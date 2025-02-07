@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
-        ServiceLocator.GetInstance().RegisterGameManager(this);
+        ServiceLocator.GetInstance().Register(this);
     }
 
     private void Start()

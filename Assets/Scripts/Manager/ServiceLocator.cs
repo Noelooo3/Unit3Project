@@ -9,8 +9,7 @@ public class ServiceLocator : MonoBehaviour
     public static ServiceLocator GetInstance() => _instance;
     private static ServiceLocator _instance;
 
-    private GameManager _gameManager;
-    private Player _player;
+    private Dictionary<Type, object> _services = new Dictionary<Type, object>();
     
     private void Awake()
     {
@@ -22,23 +21,27 @@ public class ServiceLocator : MonoBehaviour
         _instance = this;
     }
 
-    public void RegisterGameManager(GameManager gameManager)
+    public void Register<T>(T service)
     {
-        _gameManager = gameManager;
+        if (_services.ContainsKey(service.GetType()))
+        {
+            Debug.LogWarning("Service already registered: " + service.GetType().Name);
+            return;
+        }
+        _services.Add(typeof(T), service);
     }
 
-    public void RegisterPlayer(Player player)
+    public bool Get<T>(out T service)
     {
-        _player = player;
-    }
-
-    public GameManager GetGameManager()
-    {
-        return _gameManager;
-    }
-
-    public Player GetPlayer()
-    {
-        return _player;
+        if (_services.ContainsKey(typeof(T)))
+        {
+            service = (T)_services[typeof(T)];
+            return true;
+        }
+        else
+        {
+            service = default(T);
+            return false;
+        }
     }
 }
